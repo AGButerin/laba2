@@ -1,0 +1,83 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+struct Point {
+    double x, y;
+};
+
+struct Line {
+    double a, b, c; // уравнение прямой: ax + by + c = 0
+};
+
+// Функция для расчета расстояния между двумя точками
+double distance(Point p1, Point p2) {
+    return sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
+}
+
+// Функция для нахождения точки пересечения прямых
+Point intersectionPoint(Line l1, Line l2) {
+    Point intersection;
+    double denominator = (l1.a * l2.b - l2.a * l1.b);
+    if (denominator == 0) {
+        // Прямые параллельны или совпадают
+        intersection.x = intersection.y = NAN; // Возвращаем NaN в случае отсутствия единственной точки пересечения
+    } else {
+        intersection.x = (l1.b * l2.c - l2.b * l1.c) / denominator;
+        intersection.y = (l1.c * l2.a - l2.c * l1.a) / denominator;
+    }
+    return intersection;
+}
+
+// Функция для нахождения угла между прямыми
+double angleBetweenLines(Line l1, Line l2) {
+    double numerator = fabs(l1.a * l2.b - l2.a * l1.b);
+    double denominator = sqrt((l1.a * l1.a + l1.b * l1.b) * (l2.a * l2.a + l2.b * l2.b));
+    double sin_theta = numerator / denominator;
+    return asin(sin_theta);
+}
+
+int main() {
+    srand(time(0)); // Инициализация генератора случайных чисел
+
+    // Генерация случайных параметров прямых и координат точки
+    Line line1, line2;
+    line1.a = rand() % 10 - 5; // случайное число от -5 до 5
+    line1.b = rand() % 10 - 5;
+    line1.c = rand() % 10 - 5;
+    line2.a = rand() % 10 - 5;
+    line2.b = rand() % 10 - 5;
+    line2.c = rand() % 10 - 5;
+    Point point;
+    point.x = rand() % 10 - 5;
+    point.y = rand() % 10 - 5;
+
+    // Расчет расстояний от точки до прямых
+    double distance1 = fabs((line1.a * point.x + line1.b * point.y + line1.c) / sqrt(line1.a * line1.a + line1.b * line1.b));
+    double distance2 = fabs((line2.a * point.x + line2.b * point.y + line2.c) / sqrt(line2.a * line2.a + line2.b * line2.b));
+
+    // Нахождение точки пересечения прямых
+    Point intersection = intersectionPoint(line1, line2);
+
+    // Расчет расстояния от заданной точки до точки пересечения прямых
+    double distance_to_intersection = distance(point, intersection);
+
+    // Нахождение угла между прямыми
+    double angle = angleBetweenLines(line1, line2);
+
+    // Вывод результатов
+    cout << "Расстояние от точки до первой линии: " << distance1 << endl;
+    cout << "Расстояние от точки до второй линии: " << distance2 << endl;
+    if (isnan(intersection.x) || isnan(intersection.y)) {
+        cout << "Линии параллельны или идентичны; единой точки пересечения нет." << endl;
+    } else {
+        cout << "Координаты точки пересечения: (" << intersection.x << ", " << intersection.y << ")" << endl;
+        cout << "Расстояние от точки до точки пересечения: " << distance_to_intersection << endl;
+    }
+    cout << "Угол между линиями: " << angle << " радианы" << endl;
+
+    return 0;
+}
