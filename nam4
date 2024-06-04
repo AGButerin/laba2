@@ -1,0 +1,68 @@
+import random
+import math
+
+class Point:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+class Plane:
+    def __init__(self, a, b, c, d):
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
+
+class Line:
+    def __init__(self, point, direction):
+        self.point = point
+        self.direction = direction
+
+class HyperbolicParaboloid:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+def intersects_plane(hyperbolic_paraboloid, plane):
+    # Проверка пересечения плоскости с гиперболическим параболоидом
+    return plane.a * hyperbolic_paraboloid.a**2 + plane.b * hyperbolic_paraboloid.b**2 == plane.c
+
+def belongs_to_hyperbolic_paraboloid(point, hyperbolic_paraboloid):
+    # Проверка принадлежности точки гиперболическому параболоиду
+    return (point.x**2 / hyperbolic_paraboloid.a**2) - (point.y**2 / hyperbolic_paraboloid.b**2) == point.z
+
+def main():
+    # Генерация случайных параметров для гиперболического параболоида
+    a = random.uniform(1, 10)
+    b = random.uniform(1, 10)
+    hyperbolic_paraboloid = HyperbolicParaboloid(a, b)
+
+    # Генерация случайных параметров для плоскости
+    plane_a = random.uniform(1, 10)
+    plane_b = random.uniform(1, 10)
+    plane_c = random.uniform(1, 10)
+    plane_d = random.uniform(1, 10)
+    plane = Plane(plane_a, plane_b, plane_c, plane_d)
+
+    # Проверка пересечения плоскости с гиперболическим параболоидом
+    if intersects_plane(hyperbolic_paraboloid, plane):
+        print("Плоскость пересекает гиперболический параболоид")
+    else:
+        print("Плоскость не пересекает гиперболический параболоид")
+
+    # Генерация случайных координат для точки
+    point_x = random.uniform(-10, 10)
+    point_y = random.uniform(-10, 10)
+    point_z = random.uniform(-10, 10)
+    point = Point(point_x, point_y, point_z)
+
+    # Проверка принадлежности точки гиперболическому параболоиду
+    if belongs_to_hyperbolic_paraboloid(point, hyperbolic_paraboloid):
+        print("Точка принадлежит гиперболическому параболоиду")
+    else:
+        print("Точка не принадлежит гиперболическому параболоиду")
+
+if __name__ == "__main__":
+    main()
+
