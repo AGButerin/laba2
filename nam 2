@@ -1,0 +1,103 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+struct Vector {
+    double x, y, z;
+};
+
+// Функция для расчета длины вектора
+double vectorLength(Vector v) {
+    return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+// Функция для расчета скалярного произведения векторов
+double dotProduct(Vector v1, Vector v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+// Функция для расчета угла между векторами в радианах
+double angleBetweenVectors(Vector v1, Vector v2) {
+    double dot = dotProduct(v1, v2);
+    double len_v1 = vectorLength(v1);
+    double len_v2 = vectorLength(v2);
+    return acos(dot / (len_v1 * len_v2));
+}
+
+// Функция для вычисления суммы векторов
+Vector sumVectors(Vector v1, Vector v2) {
+    Vector sum;
+    sum.x = v1.x + v2.x;
+    sum.y = v1.y + v2.y;
+    sum.z = v1.z + v2.z;
+    return sum;
+}
+
+// Функция для вычисления разности векторов
+Vector subtractVectors(Vector v1, Vector v2) {
+    Vector diff;
+    diff.x = v1.x - v2.x;
+    diff.y = v1.y - v2.y;
+    diff.z = v1.z - v2.z;
+    return diff;
+}
+
+// Функция для определения, параллельны ли векторы
+bool areParallel(Vector v1, Vector v2) {
+    // Векторы параллельны, если их векторное произведение равно нулю
+    Vector cross_product = {
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x
+    };
+    return vectorLength(cross_product) == 0;
+}
+
+// Функция для вычисления векторного произведения векторов
+Vector crossProduct(Vector v1, Vector v2) {
+    Vector cross_product = {
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x
+    };
+    return cross_product;
+}
+
+int main() {
+    srand(time(0)); // Инициализация генератора случайных чисел
+
+    // Генерация случайных координат для двух векторов
+    Vector v1 = {rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5};
+    Vector v2 = {rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5};
+
+    // Вычисление длин векторов
+    double length_v1 = vectorLength(v1);
+    double length_v2 = vectorLength(v2);
+
+    // Вычисление угла между векторами в радианах
+    double angle_rad = angleBetweenVectors(v1, v2);
+
+    // Вычисление суммы и разности векторов
+    Vector sum = sumVectors(v1, v2);
+    Vector diff = subtractVectors(v1, v2);
+
+    // Проверка на параллельность векторов
+    bool parallel = areParallel(v1, v2);
+
+    // Вычисление векторного произведения
+    Vector cross = crossProduct(v1, v2);
+
+    // Вывод результатов
+    cout << "Длина первого вектора: " << length_v1 << endl;
+    cout << "Длина второго вектора: " << length_v2 << endl;
+    cout << "Угол между векторами: " << angle_rad << " радиан" << endl;
+    cout << "Сумма векторов: (" << sum.x << ", " << sum.y << ", " << sum.z << ")" << endl;
+    cout << "Разность векторов: (" << diff.x << ", " << diff.y << ", " << diff.z << ")" << endl;
+    cout << "Векторы " << (parallel ? "параллельны" : "не параллельны") << endl;
+    cout << "Векторное произведение: (" << cross.x << ", " << cross.y << ", " << cross.z << ")" << endl;
+
+    return 0;
+}
