@@ -1,0 +1,76 @@
+import random
+import math
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class Ellipse:
+    def __init__(self, a, b, h, k):
+        self.a = a  # Длина большой полуоси
+        self.b = b  # Длина малой полуоси
+        self.h = h  # Координата центра эллипса по x
+        self.k = k  # Координата центра эллипса по y
+
+def point_in_ellipse(point, ellipse):
+    # Проверка, принадлежит ли точка эллипсу
+    distance = math.sqrt(((point.x - ellipse.h) ** 2) / (ellipse.a ** 2) + ((point.y - ellipse.k) ** 2) / (ellipse.b ** 2))
+    return distance <= 1
+
+def focus_coordinates(ellipse):
+    # Нахождение координат фокусов эллипса
+    c = math.sqrt(ellipse.a ** 2 - ellipse.b ** 2)
+    focus1 = Point(ellipse.h + c, ellipse.k)
+    focus2 = Point(ellipse.h - c, ellipse.k)
+    return focus1, focus2
+
+def axis_lengths(ellipse):
+    # Нахождение длин полуосей эллипса
+    return ellipse.a, ellipse.b
+
+def eccentricity(ellipse):
+    # Нахождение эксцентриситета эллипса
+    return math.sqrt(1 - (ellipse.b ** 2) / (ellipse.a ** 2))
+
+def distance_to_directrices(ellipse):
+    # Нахождение расстояния от директрис эллипса до его центра
+    c = math.sqrt(ellipse.a ** 2 - ellipse.b ** 2)
+    return abs(c)
+
+def main():
+    # Генерация случайных параметров для эллипса и координат точки
+    a = random.uniform(1, 10)  # Длина большой полуоси
+    b = random.uniform(0.1, 0.9) * a  # Длина малой полуоси (чтобы не была слишком близка к a)
+    h = random.uniform(-10, 10)  # Координата центра эллипса по x
+    k = random.uniform(-10, 10)  # Координата центра эллипса по y
+    point = Point(random.uniform(-20, 20), random.uniform(-20, 20))  # Случайная точка на плоскости
+
+    # Создание объекта эллипса
+    ellipse = Ellipse(a, b, h, k)
+
+    # Проверка, принадлежит ли точка эллипсу
+    if point_in_ellipse(point, ellipse):
+        print("Точка принадлежит эллипсу")
+    else:
+        print("Точка не принадлежит эллипсу")
+
+    # Нахождение координат фокусов эллипса
+    focus1, focus2 = focus_coordinates(ellipse)
+    print("Координаты фокусов эллипса:", f"({focus1.x}, {focus1.y})", f"({focus2.x}, {focus2.y})")
+
+    # Нахождение длин полуосей эллипса
+    major_axis, minor_axis = axis_lengths(ellipse)
+    print("Длина большой полуоси:", major_axis)
+    print("Длина малой полуоси:", minor_axis)
+
+    # Нахождение эксцентриситета эллипса
+    e = eccentricity(ellipse)
+    print("Эксцентриситет эллипса:", e)
+
+    # Нахождение расстояния от директрис эллипса до его центра
+    distance_to_direct = distance_to_directrices(ellipse)
+    print("Расстояние от директрис эллипса до его центра:", distance_to_direct)
+
+if __name__ == "__main__":
+    main()
